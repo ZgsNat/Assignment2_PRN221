@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using _22_NguyenThaiThinh_Assignment2.DataAccess;
+using Newtonsoft.Json;
 
 namespace _22_NguyenThaiThinh_Assignment2.Pages.Customers
 {
@@ -44,8 +45,9 @@ namespace _22_NguyenThaiThinh_Assignment2.Pages.Customers
 
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
+        /*public async Task<IActionResult> OnPostAsync()
         {
+            
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -70,7 +72,71 @@ namespace _22_NguyenThaiThinh_Assignment2.Pages.Customers
             }
 
             return RedirectToPage("./Index");
+        }*/
+        public async Task<IActionResult> OnPostAsync(string? accountData)
+        {
+            
+            if (accountData == null)
+            {
+                if (!ModelState.IsValid)
+                {
+                    return Page();
+                }
+
+                _context.Attach(Account).State = EntityState.Modified;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!AccountExists(Account.AccountId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToPage("./Index");
+            }
+            // Phân tích dữ liệu JSON từ chuỗi dữ liệu đã gửi
+            var account = JsonConvert.DeserializeObject<Account[]>(accountData);
+
+            if (account == null || !ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            // Thực hiện các thao tác cần thiết để cập nhật thông tin tài khoản trong cơ sở dữ liệu
+            try
+            {
+                // Ví dụ:
+                foreach (var acc in account)
+                {
+                    _context.Attach(acc).State = EntityState.Modified;
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!AccountExists(Account.AccountId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return RedirectToPage("./Index");
         }
+
 
         private bool AccountExists(int id)
         {

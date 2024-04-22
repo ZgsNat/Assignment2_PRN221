@@ -94,11 +94,10 @@
                     <div class="form-group">
                         <label asp-for="account.FullName" class="control-label"></label>
                         <input asp-for="account.FullName" id="editFullname" class="form-control" />
-                        @* <span asp-validation-for="account.FullName" class="text-danger"></span> *@
                     </div>
                     <div class="form-group form-check">
                         <label class="form-check-label">
-                            <input asp-for="account.Type" type="checkbox" class="form-check-input" id="editType" value="True"/>
+                            <input class="form-check-input" id="editType" asp-for="account.Type" value="true"/>@Html.DisplayNameFor(model => model.account.Type)
                         </label>
                     </div>
                 </div>
@@ -185,20 +184,52 @@
             $("#editType").val(data.type);
             // Gán giá trị cho trường checkbox dựa trên giá trị boolean nhận được từ dữ liệu
             $("#editType").prop("checked", data.type);
-
-            // Hiển thị modal chỉnh sửa sản phẩm
             $("#editModal").modal("show");
         });
     });
-
-    // Xử lý sự kiện click trên nút "Save changes" trong modal
+    
     $("#btnSaveEdit").click(function () {
         var productForm = $("#editForm").serialize(); // Lấy dữ liệu từ form chỉnh sửa
-      
+
+        // Chuyển đổi DataTable thành một mảng JSON
+        var typeValue = $("#editType").is(":checked") ? true : false;
+        var accountData = {
+            AccountId: $("#editAccountId").val(),
+            UserName: $("#editUsername").val(),
+            Password: $("#editPassword").val(),
+            FullName: $("#editFullname").val(),
+            Type: typeValue
+        };
+        var jsonData = JSON.stringify([accountData]); // Chuyển thành mảng JSON
+
+        // Nối chuỗi JSON vào formData
+        productForm += '&accountData=' + encodeURIComponent(jsonData);
+
         $.ajax({
             type: "POST",
             url: "/Customers/Edit", // Đường dẫn đến phương thức OnPostAsync của trang Edit
             data: productForm,
+            success: function () {
+                // Sau khi chỉnh sửa thành công, ẩn modal và làm mới trang
+                $("#editModal").modal("hide");
+                location.reload();
+            }
+        });
+    });
+
+
+    // Xử lý sự kiện click trên nút "Save changes" trong modal
+    $("#bttnSaveEdit").click(function () {
+        var typeValue = $("#editType").is(":checked") ? "true" : "false";
+        $("#editForm #editType").prop("checked", $("#editType").is(":checked"));
+        var productForm = $("#editForm").serialize(); // Lấy dữ liệu từ form chỉnh sửa
+        // Hiển thị giá trị của checkbox
+        // alert("Giá trị của checkbox là: " + typeValue)
+        $.ajax({
+            type: "POST",
+            url: "/Customers/Edit", // Đường dẫn đến phương thức OnPostAsync của trang Edit
+            data: productForm,
+            //data: productForm,
             success: function () {
                 // Sau khi chỉnh sửa thành công, ẩn modal và làm mới trang
                 $("#editModal").modal("hide");

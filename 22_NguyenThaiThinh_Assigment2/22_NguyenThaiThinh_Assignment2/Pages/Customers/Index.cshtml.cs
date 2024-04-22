@@ -19,12 +19,14 @@ namespace _22_NguyenThaiThinh_Assignment2.Pages.Customers
         }
         public Account account { get; set; } = default!;
         public IList<Account> Account { get;set; } = default!;
-
+        
         public async Task OnGetAsync()
         {
+            
             if (_context.Accounts != null)
             {
                 Account = await _context.Accounts.ToListAsync();
+                account = Account[0];
             }
         }
     }
