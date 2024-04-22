@@ -1,0 +1,43 @@
+﻿@page
+@model _22_NguyenThaiThinh_Assignment2.Pages.Orders.ClientOrderModel
+@{
+    Layout = "_LayoutMain";
+}
+<h1>Client Orders</h1>
+
+@if (Model.Orders != null && Model.Orders.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Order Date</th>
+                <th>Required Date</th>
+                <th>Shipped Date</th>
+                <th>Freight</th>
+                <th>Shipped Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+                <tr>
+                    <td>@order.OrderId</td>
+                    <td>@order.OrderDate.ToShortDateString()</td>
+                    <td>@order.RequiredDate?.ToShortDateString()</td>
+                    <td>@(order.ShippedDate.HasValue ? order.ShippedDate.Value.ToShortDateString() : "")</td>
+                    <td>@order.Freight</td>
+                    <td>@order.ShippedAddress</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No orders found.</p>
+}
+
+<div>
+    <a asp-page="/Index">Back to Home</a>
+</div>

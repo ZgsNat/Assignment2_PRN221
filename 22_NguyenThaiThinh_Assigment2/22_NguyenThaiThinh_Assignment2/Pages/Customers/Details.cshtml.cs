@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using _22_NguyenThaiThinh_Assignment2.DataAccess;
+
+namespace _22_NguyenThaiThinh_Assignment2.Pages.Customers
+{
+    public class DetailsModel : PageModel
+    {
+        private readonly _22_NguyenThaiThinh_Assignment2.DataAccess.Ass2_Prn221_Bl5Context _context;
+
+        public DetailsModel(_22_NguyenThaiThinh_Assignment2.DataAccess.Ass2_Prn221_Bl5Context context)
+        {
+            _context = context;
+        }
+
+      public Account Account { get; set; } = default!; 
+
+        public async Task<IActionResult> OnGetAsync(int? id)
+        {
+            if (id == null || _context.Accounts == null)
+            {
+                return NotFound();
+            }
+
+            var account = await _context.Accounts.FirstOrDefaultAsync(m => m.AccountId == id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+            else 
+            {
+                Account = account;
+            }
+            return Page();
+        }
+    }
+}

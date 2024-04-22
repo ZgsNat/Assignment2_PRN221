@@ -1,0 +1,36 @@
+﻿@page
+@model _22_NguyenThaiThinh_Assignment2.Pages.ProfileModel
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "_LayoutMain";
+}
+
+<h1>Profile</h1>
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group" style="visibility:hidden">
+            <label asp-for="Customer.CustomerId" class="control-label"></label>
+            <input asp-for="Customer.CustomerId" class="form-control" />
+            <span asp-validation-for="Customer.CustomerId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.ContactName" class="control-label"></label>
+            <input asp-for="Customer.ContactName" class="form-control" />
+            <span asp-validation-for="Customer.ContactName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Adress" class="control-label"></label>
+            <input asp-for="Customer.Adress" class="form-control" />
+            <span asp-validation-for="Customer.Adress" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Customer.Phone" class="control-label"></label>
+            <input asp-for="Customer.Phone" class="form-control" />
+            <span asp-validation-for="Customer.Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+

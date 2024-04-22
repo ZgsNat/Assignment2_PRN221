@@ -1,0 +1,266 @@
+﻿@page
+@model _22_NguyenThaiThinh_Assignment2.Pages.Products.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutMain";
+}
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<h1>Index</h1>
+
+@* <p>
+    <a asp-page="Create">Create New</a>
+</p> *@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Create New
+</button>
+
+<!-- add Product -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="saveForm" method="post">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="product.ProductName" class="control-label"></label>
+                                <input asp-for="product.ProductName" class="form-control"/>
+                                <span asp-validation-for="product.ProductName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="product.SupplierId" class="control-label"></label>
+                                <select asp-for="product.SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="product.CategoryId" class="control-label"></label>
+                                <select asp-for="product.CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="product.UnitPrice" class="control-label"></label>
+                                <input asp-for="product.UnitPrice" class="form-control" />
+                                <span asp-validation-for="product.UnitPrice" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="product.ProductImage" class="control-label"></label>
+                                <input asp-for="product.ProductImage" class="form-control" />
+                                <span asp-validation-for="product.ProductImage" class="text-danger"></span>
+                            </div>
+                            @* <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary" />
+                            </div> *@
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="btnSave" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Edit Product-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editForm" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="editProductId" asp-for="product.ProductId" />
+                    <div class="form-group">
+                      
+                        <label asp-for="product.ProductName" class="control-label"></label>
+                        <input asp-for="product.ProductName" id="editProductName" class="form-control" />
+                        <span asp-validation-for="product.ProductName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                       
+                            <label asp-for="product.SupplierId" class="control-label"></label>
+                            <select asp-for="product.SupplierId" id="editSupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                            
+                    </div>
+                    <div class="form-group">
+                       
+                        <label asp-for="product.CategoryId" class="control-label"></label>
+                        <select asp-for="product.CategoryId" id="editCategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                    </div>
+                    <div class="form-group">
+                       
+                        <label asp-for="product.UnitPrice" class="control-label"></label>
+                        <input asp-for="product.UnitPrice" id="editUnitPrice" class="form-control" />
+                        <span asp-validation-for="product.UnitPrice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      
+                        <label asp-for="product.ProductImage" class="control-label"></label>
+                        <input asp-for="product.ProductImage" id="editProductImage" class="form-control" />
+                        <span asp-validation-for="product.ProductImage" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="btnSaveEdit" type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Form tìm kiếm sản phẩm -->
+<div>
+    <input type="text" id="searchId" placeholder="Id">
+    <input type="text" id="searchKeyword" placeholder="Keyword">
+    <input type="number" id="searchMinPrice" placeholder="Min Price">
+    <input type="number" id="searchMaxPrice" placeholder="Max Price">
+    <button type="button" onclick="searchProducts()">Search</button>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].ProductId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].QuantityPerUnit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].UnitPrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].ProductImage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Product[0].Supplier)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="productTableBody">
+        @foreach (var item in Model.Product)
+        {
+            <tr>
+                <td >@Html.DisplayFor(modelItem => item.ProductId)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityPerUnit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductImage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplier.SupplierId)
+                </td>
+                <td>
+                    <a href="#" class="editBtn" data-product-id="@item.ProductId">Edit</a> |
+                    @* <a asp-page="./Edit" asp-route-id="@item.ProductId">Edit</a> | *@
+                    <a asp-page="./Details" asp-route-id="@item.ProductId">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ProductId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table> 
+<script>
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    })
+
+
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            var empForm = $("#saveForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Products/Create",
+                data: empForm,
+                success: function () {
+                    window.location.href = "/Products/Index";
+                }
+            });
+        });
+    });
+
+    function searchProducts() {
+            var id = $("#searchId").val().toLowerCase();
+        var keyword = $("#searchKeyword").val().toLowerCase();
+        var minPrice = parseFloat($("#searchMinPrice").val());
+        var maxPrice = parseFloat($("#searchMaxPrice").val());
+
+        $("#productTableBody tr").each(function () {
+            var productName = $(this).find("td:eq(1)").text().toLowerCase();
+            var productId = $(this).find("td:eq(0)").text();
+            var unitPrice = parseFloat($(this).find("td:eq(3)").text());
+
+            if (productId.includes(id) && productName.includes(keyword) && (!minPrice || unitPrice >= minPrice) && (!maxPrice || unitPrice <= maxPrice)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+        // Xử lý sự kiện click trên nút "Edit"
+    $("a.editBtn").click(function () {
+        var productId = $(this).data("product-id"); // Lấy ID của sản phẩm
+        $.get("/Products/Edit", { id: productId, ok : true }, function (data) {
+            // Điền thông tin sản phẩm vào modal chỉnh sửa
+                $("#editProductId").val(data.productId);
+            $("#editProductName").val(data.productName);
+            $("#editSupplierId").val(data.supplierId);
+            $("#editCategoryId").val(data.categoryId);
+            $("#editUnitPrice").val(data.unitPrice);
+            $("#editProductImage").val(data.productImage);
+
+            // Hiển thị modal chỉnh sửa sản phẩm
+            $("#editModal").modal("show");
+        });
+    });
+
+    // Xử lý sự kiện click trên nút "Save changes" trong modal
+        $("#btnSaveEdit").click(function () {
+        var productForm = $("#editForm").serialize(); // Lấy dữ liệu từ form chỉnh sửa
+        $.ajax({
+            type: "POST",
+            url: "/Products/Edit", // Đường dẫn đến phương thức OnPostAsync của trang Edit
+            data: productForm,
+            success: function () {
+                // Sau khi chỉnh sửa thành công, ẩn modal và làm mới trang
+                $("#editModal").modal("hide");
+                location.reload();
+            }
+        });
+    });
+</script>

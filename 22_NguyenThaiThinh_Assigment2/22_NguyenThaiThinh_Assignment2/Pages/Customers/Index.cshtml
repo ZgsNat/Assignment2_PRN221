@@ -1,0 +1,209 @@
+﻿@page
+@model _22_NguyenThaiThinh_Assignment2.Pages.Customers.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutMain";
+}
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<h1>Index</h1>
+
+@* <p>
+    <a asp-page="Create">Create New</a>
+</p> *@
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Create New
+</button>
+<!-- add Account -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="saveForm" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="account.UserName" class="control-label"></label>
+                                <input asp-for="account.UserName" class="form-control"/>
+                                <span asp-validation-for="account.UserName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="account.Password" class="control-label"></label>
+                                <input asp-for="account.Password" class="form-control"/>
+                                <span asp-validation-for="account.Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="account.FullName" class="control-label"></label>
+                                <input asp-for="account.FullName" class="form-control"/>
+                                <span asp-validation-for="account.FullName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" asp-for="account.Type"/>@Html.DisplayNameFor(model => model.account.Type)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="btnSave" type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--Edit Account-->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editForm" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="editAccountId" asp-for="account.AccountId" />
+                    <div class="form-group">
+                        <label asp-for="account.UserName" class="control-label"></label>
+                        <input asp-for="account.UserName" id="editUsername" class="form-control" />
+                        <span asp-validation-for="account.UserName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="account.Password" class="control-label"></label>
+                        <input asp-for="account.Password" id="editPassword" class="form-control" />
+                        <span asp-validation-for="account.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="account.FullName" class="control-label"></label>
+                        <input asp-for="account.FullName" id="editFullname" class="form-control" />
+                        @* <span asp-validation-for="account.FullName" class="text-danger"></span> *@
+                    </div>
+                    <div class="form-group form-check">
+                        <label class="form-check-label">
+                            <input asp-for="account.Type" type="checkbox" class="form-check-input" id="editType" value="True"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="btnSaveEdit" type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].FullName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Account[0].Type)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Account) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                    <input type="password" value="@Html.DisplayFor(modelItem => item.Password)" readonly/>
+                @* @Html.DisplayFor(modelItem => item.Password) *@
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                    <a href="#" class="editBtn" data-account-id="@item.AccountId">Edit</a> |
+                <a asp-page="./Edit" asp-route-id="@item.AccountId">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.AccountId">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.AccountId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<script>
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#myInput').trigger('focus')
+    })
+
+
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            var empForm = $("#saveForm").serialize();
+            $.ajax({
+                type: "POST",
+                url: "/Customers/Create",
+                data: empForm,
+                success: function () {
+                    window.location.href = "/Customers/Index";
+                }
+            });
+        });
+    });
+    // Xử lý sự kiện click trên nút "Edit"
+    $("a.editBtn").click(function () {
+        var accountId = $(this).data("account-id"); // Lấy ID của sản phẩm
+        $.get("/Customers/Edit", { id: accountId, ok: true }, function (data) {
+            // Điền thông tin sản phẩm vào modal chỉnh sửa
+            $("#editAccountId").val(data.accountId);
+            $("#editUsername").val(data.userName);
+            $("#editPassword").val(data.password);
+            $("#editFullname").val(data.fullName);
+            $("#editType").val(data.type);
+            // Gán giá trị cho trường checkbox dựa trên giá trị boolean nhận được từ dữ liệu
+            $("#editType").prop("checked", data.type);
+
+            // Hiển thị modal chỉnh sửa sản phẩm
+            $("#editModal").modal("show");
+        });
+    });
+
+    // Xử lý sự kiện click trên nút "Save changes" trong modal
+    $("#btnSaveEdit").click(function () {
+        var productForm = $("#editForm").serialize(); // Lấy dữ liệu từ form chỉnh sửa
+      
+        $.ajax({
+            type: "POST",
+            url: "/Customers/Edit", // Đường dẫn đến phương thức OnPostAsync của trang Edit
+            data: productForm,
+            success: function () {
+                // Sau khi chỉnh sửa thành công, ẩn modal và làm mới trang
+                $("#editModal").modal("hide");
+                location.reload();
+            }
+        });
+    });
+</script>

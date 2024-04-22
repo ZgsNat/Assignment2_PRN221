@@ -1,0 +1,78 @@
+﻿@page
+@model _22_NguyenThaiThinh_Assignment2.Pages.SignInModel
+@{
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign In</title>
+    <style>
+        table {
+            border: none;
+            width: 50%;
+            margin: auto;
+        }
+
+        /*         table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                } */
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+            button[type="submit"]:hover {
+                background-color: #0056b3;
+            }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <h2 style="text-align: center;">Pleas Login here</h2>
+    <p style="text-align: center;">Enter your detail below</p>
+    <form method="post">
+        <table>
+            <tr>
+                <td><label for="username">Username:</label></td>
+                <td><input type="text" id="username" name="txtusername" required></td>
+            </tr>
+            <tr>
+                <td><label for="password">Password:</label></td>
+                <td><input type="password" id="password" name="txtpassword" required></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;"><button type="submit">Sign In</button></td>
+            </tr>
+        </table>
+    </form>
+    @if(Model.Error != string.Empty)
+    {
+        <script type="text/javascript">
+            window.onload = function () {
+                alert("@Model.Error");
+            };
+        </script>
+    }
+</body>
+</html>
+
